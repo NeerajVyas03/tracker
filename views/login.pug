@@ -1,0 +1,25 @@
+html(lang="en")
+  head
+    title Login - Prayer Tracker
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" href="/styles/auth.css") 
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js") 
+
+  body.auth-page
+    .container
+      .form-box
+        h1 Welcome Back 🙏
+        p Enter your credentials to continue.
+
+        form(action="/auth/login" method="POST")
+          label(for="email") Email
+          input(type="email" name="email" required placeholder="Enter your email")
+
+          label(for="password") Password
+          input(type="password" name="password" required placeholder="Enter your password")
+
+          button(type="submit") Login
+
+        p.dont-have-account 
+          | Don't have an account? 
+          a(href="/auth/signup") Sign up

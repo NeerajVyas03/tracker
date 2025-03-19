@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    title Set Up Your 90-Day Prayer
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" href="/styles/auth.css")
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet")
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js") 
+
+  body.auth-page
+    .container
+      .form-box
+        h1 📅 Set Up Your 90-Day Prayer Journey  
+
+
+        if error
+          p.error ❌ #{error}
+        
+        form(action="/prayers/setup" method="POST")
+          label(for="startDate") Select Your Start Date:
+          input(type="date" name="startDate" required)  
+
+          button(type="submit") 🚀 Start Journey  
+
+      

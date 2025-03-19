@@ -1,0 +1,167 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@400;500;700&display=swap");
+
+:root {
+  --primary-color: #ff6b6b; /* Soft Coral Red */
+  --secondary-color: #ffdd95; /* Warm Pastel Yellow */
+  --accent-color: #c084fc; /* Soft Muted Purple */
+  --text-color: #2e2e2e; /* Dark Grey for Contrast */
+  --bg-color: #fdf6f0; /* Warm Off-White */
+  --card-bg: #f7ebe5; /* Muted Cream */
+  --border-color: #e8a49c; /* Soft Muted Coral */
+  --soft-shadow: 0 4px 12px rgba(255, 107, 107, 0.15); /* Gentle Coral Shadow */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+
+body.auth-page {
+  background: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+/* Auth Container */
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 35px;
+  background: var(--card-bg);
+  border-radius: 14px;
+  box-shadow: var(--soft-shadow);
+  text-align: center;
+  border: 1px solid var(--border-color);
+  animation: fadeIn 0.6s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.container:hover {
+  transform: scale(1.01);
+}
+
+/* Title */
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 10px;
+  font-family: "Poppins", sans-serif;
+}
+
+p {
+  font-size: 15px;
+  color: var(--text-color);
+  margin-bottom: 22px;
+}
+
+/* Form Elements */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* Input Fields */
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-color);
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  color: var(--text-color);
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(46, 46, 46, 0.6);
+}
+
+input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0px 0px 14px rgba(255, 107, 107, 0.4);
+  transform: scale(1.02);
+}
+
+/* Buttons */
+button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: 600;
+}
+
+button:hover {
+  background: var(--accent-color);
+  transform: scale(1.05);
+  box-shadow: 0px 5px 20px rgba(192, 132, 252, 0.3);
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--accent-color);
+}
+
+/* Account Options */
+.dont-have-account,
+.have-account {
+  font-size: 14px;
+  margin-top: 12px;
+  color: var(--text-color);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 480px) {
+  .container {
+    width: 90%;
+    padding: 25px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}

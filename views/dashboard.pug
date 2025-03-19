@@ -1,0 +1,98 @@
+doctype html
+html(lang="en")
+  head
+    title Prayer Dashboard
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" href="/styles/dashboard.css") 
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js") 
+
+  body
+    .container
+      //- User Information and Date Range
+      h1 Welcome #{user.name}
+      p Start Date:  #{moment(user.startDate).format("DD MMM YYYY")}
+      p End Date:    #{moment(user.startDate).add(89, "days").format("DD MMM YYYY")}
+
+      //- Progress Bar
+      .progress-container
+        .progress-bar(style=`width: ${progressPercentage}%`) #{progressPercentage.toFixed(1)}% Completed
+
+      //- Prayer List Table (Desktop View)
+      table
+        thead
+          tr
+            th Day
+            th Date
+            th Wake-Up Time
+            th Prayer 1
+            th Prayer 2
+            th Prayer 3
+        tbody
+          each log, index in prayerLogs
+            - var dayIndex = index + 1
+            - var isComplete = log.prayers.every(p => p)
+            - var isPartial = log.prayers.some(p => p) && !isComplete
+            - var statusColor = isComplete ? "lightgreen" : isPartial ? "lightyellow" : "lightcoral"
+
+            //- Calculate Prayer Slot Timings
+            - var wakeUpMoment = log.wakeUpTime ? moment(log.wakeUpTime, "HH:mm") : null
+            - var slot1 = wakeUpMoment ? `${wakeUpMoment.format("hh:mm A")} - ${wakeUpMoment.clone().add(4, "hours").format("hh:mm A")}` : "N/A"
+            - var slot2 = wakeUpMoment ? `${wakeUpMoment.clone().add(4, "hours").format("hh:mm A")} - ${wakeUpMoment.clone().add(8, "hours").format("hh:mm A")}` : "N/A"
+            - var slot3 = wakeUpMoment ? `${wakeUpMoment.clone().add(8, "hours").format("hh:mm A")} - ${wakeUpMoment.clone().add(12, "hours").format("hh:mm A")}` : "N/A"
+
+            tr(style=`background-color: ${statusColor}`)
+              td Day #{dayIndex}
+              td #{moment(log.date).format("DD MMM YYYY")}
+              td #{log.wakeUpTime || "Pending"} 
+
+              each prayer, i in log.prayers
+                - var slotTime = i === 0 ? slot1 : i === 1 ? slot2 : slot3
+                td(style=`background-color: ${prayer ? "lightgreen" : "lightcoral"}`)
+                  | #{slotTime}
+                  if prayer
+                    | ✅ Done
+                  else
+                    form(action="/prayers/mark" method="POST")
+                      input(type="hidden" name="date" value=`${moment(log.date).format("YYYY-MM-DD")}`)
+                      input(type="hidden" name="prayerNumber" value=`${i + 1}`)
+                      button(type="submit") Mark Done
+
+      //- Wake-Up Time Entry for Each New Day
+      if !todayLog
+        form(action="/prayers/log-wakeup" method="POST")
+          label(for="wakeUpTime") Enter Wake-Up Time for Today:
+          input.time-input(type="time" name="wakeUpTime" required)
+          button(type="submit") Submit Wake-Up Time
+
+
+      //- Mobile-Friendly View
+      .mobile-view
+        each log, index in prayerLogs
+          - var dayIndex = index + 1
+          - var isComplete = log.prayers.every(p => p)
+          - var isPartial = log.prayers.some(p => p) && !isComplete
+          - var statusColor = isComplete ? "lightgreen" : isPartial ? "lightyellow" : "lightcoral"
+
+          //- Calculate Prayer Slot Timings for Each Log
+          - var wakeUpMoment = log.wakeUpTime ? moment(log.wakeUpTime, "HH:mm") : null
+          - var slot1 = wakeUpMoment ? `${wakeUpMoment.format("hh:mm A")} - ${wakeUpMoment.clone().add(4, "hours").format("hh:mm A")}` : "N/A"
+          - var slot2 = wakeUpMoment ? `${wakeUpMoment.clone().add(4, "hours").format("hh:mm A")} - ${wakeUpMoment.clone().add(8, "hours").format("hh:mm A")}` : "N/A"
+          - var slot3 = wakeUpMoment ? `${wakeUpMoment.clone().add(8, "hours").format("hh:mm A")} - ${wakeUpMoment.clone().add(12, "hours").format("hh:mm A")}` : "N/A"
+
+          .prayer-card(style=`background-color: ${statusColor}`)
+            .card-header
+              h3 Day #{dayIndex} - #{moment(log.date).format("DD MMM YYYY")}
+            .card-content
+              p Wake-Up Time: #{log.wakeUpTime || "Pending"}
+              .prayer-status
+                each prayer, i in log.prayers
+                  - var slotTime = i === 0 ? slot1 : i === 1 ? slot2 : slot3
+                  .prayer-box(style=`background-color: ${prayer ? "lightgreen" : "lightcoral"}`)
+                    p Slot: #{slotTime}
+                    if prayer
+                      | ✅ Prayer #{i + 1} Done
+                    else
+                      form(action="/prayers/mark" method="POST")
+                        input(type="hidden" name="date" value=`${moment(log.date).format("YYYY-MM-DD")}`)
+                        input(type="hidden" name="prayerNumber" value=`${i + 1}`)
+                        button(type="submit") Mark Done
